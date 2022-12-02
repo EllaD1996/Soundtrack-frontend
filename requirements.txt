@@ -1,0 +1,6 @@
+streamlit
+streamlit-player
+python3-discogs-client
+spotipy
+sys
+os
