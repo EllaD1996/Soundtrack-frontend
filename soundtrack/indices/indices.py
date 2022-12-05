@@ -4,13 +4,14 @@ import cv2
 from matplotlib import pyplot as plt
 import pandas as pd
 
-data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
-
 #####need to have indice from model MISSING
 
-"""Returns bucket index and names for given indices"""
-
-def return_index(indices):
+def return_index():
+    """
+    Summary:Returns bucket index and names for given indices
+    Input: None
+    Return: bucket items -> DataFrame
+    """
     client = storage.Client()
     bucket_name = 'image-storage-stills'
     bucket = client.get_bucket(bucket_name)
@@ -24,13 +25,16 @@ def return_index(indices):
 
     return df
 
-"""Runs through the movie data and builds list with:
-                                    title, year, genre and image name"""
-
 def find_info_in_data(indices):
+    """
+    Summary: Runs through the movie data and builds list with: title, year, genre and image name
+    Input: indices -> np.array
+    Return: film_info and images names-> tuple
+    """
+    data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
+    df = return_index()
     info = []
     image_names = []
-
     for i in range(len(indices[0])):
         index = indices[0][i]
         name = df._get_value(index, "Image_Name")
@@ -43,9 +47,12 @@ def find_info_in_data(indices):
 
     return info, image_names
 
-"""Given the image names, get image from bucket"""
-
 def get_image(image_names):
+    """
+    Summary: Given the image names, get image from bucket
+    Input: images names -> list
+    Return: actual images -> string?
+    """
     client =  storage.Client()
     bucket = client.get_bucket('image-storage-stills')
     images = []
@@ -54,23 +61,26 @@ def get_image(image_names):
         blob = bucket.get_blob(name, prefix=dirname)
         image = blob.download_as_string()
         images.append(image)
-
     return images
 
 
-"""Function to load the image"""
-
 def load_data_new_image(image):
-            return np.array(cv2.imdecode(
-                        np.asarray(
-                            bytearray(image), dtype=np.uint8), -1
-                                    )
-                                        )
-
-"""Shows image.shocking"""
-
+    """
+    Summary: Function to load the image
+    Input: image -> string
+    Return: readable image -> np.array
+    """
+    return np.array(cv2.imdecode(
+                np.asarray(
+                    bytearray(image), dtype=np.uint8), -1)
+                                )
 
 def show_image(indices):
+    """
+    Summary: Shows image.shocking
+    Input: indices -> np.array
+    Return: original image -> .png
+    """
     info, image_names = find_info_in_data(indices)
     images = get_image(image_names)
     for image in images:
