@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
-
+from soundtrack-frontend.discogs import find_ost
+from soundtrack-frontend.spotify import get_playlists
 st.markdown('# soundtrack selectah')
 
 #st.camera_input('take a pic')
@@ -11,7 +12,18 @@ st.file_uploader('upload a pic',
                  label_visibility='collapsed'
                  )
 
+""" NEED MODELS RUNNING HERE AND RETURNING FILMS"""
+
+find_ost(film)
+
+
+get_playlists(ost_name)
+
 st.selectbox('pick a genre',[1,2,3,4,5])
+
+
+
+
 
 #get links from spotify
 pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
