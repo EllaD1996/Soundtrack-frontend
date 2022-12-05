@@ -6,5 +6,7 @@ sys
 os
 python-dotenv
 pandas
-cv2
-matplotlib
+matplotlib.pyplot
+opencv-python-headless
+PIL
+google-cloud-storage
