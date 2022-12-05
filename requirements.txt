@@ -4,3 +4,4 @@ python3-discogs-client
 spotipy
 sys
 os
+python-dotenv
