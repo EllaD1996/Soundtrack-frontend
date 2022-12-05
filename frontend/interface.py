@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import streamlit.components.v1 as components
 from soundtrack-frontend.discogs import find_ost
 from soundtrack-frontend.spotify import get_playlists
@@ -6,11 +7,13 @@ st.markdown('# soundtrack selectah')
 
 #st.camera_input('take a pic')
 
-st.file_uploader('upload a pic',
+raw_image = st.file_uploader('upload a pic',
                  type=['png','jpg','jpeg'],
                  accept_multiple_files=False,
                  label_visibility='collapsed'
                  )
+
+arrayed_img = np.array(raw_image)
 
 """ NEED MODELS RUNNING HERE AND RETURNING FILMS"""
 
