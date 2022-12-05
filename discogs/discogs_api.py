@@ -1,5 +1,4 @@
 import discogs_client
-import pandas as pd
 import requests
 
 
