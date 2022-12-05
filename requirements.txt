@@ -2,11 +2,9 @@ streamlit
 streamlit-player
 python3-discogs-client
 spotipy
-sys
-os
 python-dotenv
 pandas
-matplotlib.pyplot
+matplotlib
 opencv-python-headless
-PIL
 google-cloud-storage
+Pillow

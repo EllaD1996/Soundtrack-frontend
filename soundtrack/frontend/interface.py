@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
 import streamlit.components.v1 as components
-from soundtrack-frontend.discogs import find_ost
-from soundtrack-frontend.spotify import get_playlists
+from soundtrack.discogs.discogs_api import find_ost
+from soundtrack.spotify.spotify_api import get_playlists
 
 
 

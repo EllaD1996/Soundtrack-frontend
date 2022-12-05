@@ -1,9 +1,33 @@
-#SPOTIFY
+.env
 
-cid = '1d1a1bb5c6eb42fc84ced175f535dfdc'
-secret = 'ad33d9a004fd42a0b7e47d2356495df3'
+*.egg-info/
 
-#DISCOGS
+# OS generated files #
+######################
+.DS_Store
+__MACOSX
+# Jupiter Notebook #
+.pytest_cache
+__pycache__
+*checkpoint.ipynb
+*.ipynb_checkpoints
 
-consumer_key='pBgcbIQGkPhKVfmsmjJu'
-consumer_secret='oBLbHJYKwzNhmjhtWxRoZTyhHBPokGNV'
+# inteliJ #
+.idea
+*.gz
+*PKG-INFO
+*.egg-info
+*.csv
+05-ML/**/*.txt
+06-Deep-Learning/**/*.txt
+*.zip
+mlruns
+*.sqlite
+# IDE #
+*.vscode
+
+
+# Challengify - test challengification files
+*_challengify*
+
+Makefile
