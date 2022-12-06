@@ -3,6 +3,9 @@ import numpy as np
 import streamlit.components.v1 as components
 from soundtrack.discogs.discogs_api import find_ost
 from soundtrack.spotify.spotify_api import get_playlists
+import requests
+import json
+from PIL import Image
 
 
 
@@ -16,14 +19,21 @@ raw_image = st.file_uploader('upload a pic',
                  label_visibility='collapsed'
                  )
 
-arrayed_img = np.array(raw_image)
+if raw_image is not None:
+    arrayed_img = np.array(Image.open(raw_image))
 
-""" NEED MODELS RUNNING HERE AND RETURNING FILMS"""
-
-find_ost(film)
+    st.write(arrayed_img.shape)
 
 
-get_playlists(ost_name)
+    # Request and response
+    response = requests.post("http://0.0.0.0:8000/predict", json=json.dumps(arrayed_img.tolist()))
+    #response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict", json=json.dumps(arrayed_img.tolist()))
+    print(response.json())
+
+
+
+
+playlist = get_playlists(films)
 
 st.selectbox('pick a genre',[1,2,3,4,5])
 

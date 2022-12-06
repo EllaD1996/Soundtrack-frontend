@@ -31,7 +31,7 @@ def get_playlists(films):
         for album_info in results['tracks']['items']:
             if album_info['album']['total_tracks'] > 3:
                 if album_info['album']['external_urls']['spotify'] not in playlists:
-                    playlists.append((i['album']['external_urls']['spotify']))
+                    playlists.append((album_info['album']['external_urls']['spotify']))
 
     return playlists
 
