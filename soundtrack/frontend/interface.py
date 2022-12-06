@@ -1,12 +1,7 @@
 import streamlit as st
-import numpy as np
 import streamlit.components.v1 as components
-#from soundtrack.discogs.discogs_api import find_ost
-#from soundtrack.spotify.spotify_api import get_playlists
-from soundtrack.indices.indices import find_info_in_data
+from interface_backend import create_playlist
 import requests
-import json
-from PIL import Image
 
 
 
@@ -33,47 +28,13 @@ if uploaded_image is not None:
     print('Image sended to the server')
     index_result = response.json()
 
-    print('Process Complete finding your playlist...')
-    list_index = index_result['idx']
-    print(list_index)
-    # Searching for the movie title
-    movies_info, images = find_info_in_data(list_index)
-    print(movies_info, end="\n")
 
-#relate index with buckets
+    entire_playlist = create_playlist(index_result)
 
 
 
-#print(movies_info)
-
-#select the info of th movie (title)
 
 
-#run dicogs api
-
-#run spotypi api
-
-# show result
-
-
-
-#if raw_image is not None:
-#    arrayed_img = np.array(Image.open(raw_image))
-#
-#    st.write(arrayed_img.shape)
-#
-#
-#    # Request and response
-#    response = requests.post("http://0.0.0.0:8000/predict", json=json.dumps(arrayed_img.tolist()))
-#    #response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict", json=json.dumps(arrayed_img.tolist()))
-#    print(response.json())
-#
-
-
-
-#playlist = get_playlists(films)
-#
-#st.selectbox('pick a genre',[1,2,3,4,5])
 
 
 
