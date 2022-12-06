@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
 import streamlit.components.v1 as components
-from soundtrack.discogs.discogs_api import find_ost
-from soundtrack.spotify.spotify_api import get_playlists
+#from soundtrack.discogs.discogs_api import find_ost
+#from soundtrack.spotify.spotify_api import get_playlists
 from soundtrack.indices.indices import find_info_in_data
 import requests
 import json
@@ -33,14 +33,18 @@ if uploaded_image is not None:
     print('Image sended to the server')
     index_result = response.json()
 
-print('Process Complete finding your playlist...')
-list_index = index_result['idx']
+    print('Process Complete finding your playlist...')
+    list_index = index_result['idx']
+    print(list_index)
+    # Searching for the movie title
+    movies_info, images = find_info_in_data(list_index)
+    print(movies_info, end="\n")
 
 #relate index with buckets
 
-movies_info, images = find_info_in_data(list_index)
 
-print(movies_info)
+
+#print(movies_info)
 
 #select the info of th movie (title)
 
