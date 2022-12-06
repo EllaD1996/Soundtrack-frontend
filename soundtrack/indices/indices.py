@@ -28,17 +28,16 @@ def return_index():
 def find_info_in_data(indices):
     """
     Summary: Runs through the movie data and builds list with: title, year, genre and image name
-    Input: indices -> np.array [[1,2,34,,5]]
+    Input: indices -> list [1,2,34,,5]
     Return: film_info and images names-> tuple
     """
     data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
     df = return_index()
     info = []
     image_names = []
-    for i in range(len(indices[0])):
-        index = indices[0][i]
+    for index in indices:
         name = df._get_value(index, "Image_Name")
-        nindex = data.index[data['Image_name'] == name]
+        nindex = data.index[data['Image_name'] == name.replace('New_Image/', "")]
         title = (data.loc[nindex, 'Title'].item()).capitalize()
         year = data.loc[nindex, 'Year'].item()
         genre = data.loc[nindex, 'Genre'].item()
