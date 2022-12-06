@@ -30,3 +30,5 @@ mlruns
 *_challengify*
 
 Makefile
+
+*.streamlit/

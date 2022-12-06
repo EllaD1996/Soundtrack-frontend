@@ -8,3 +8,4 @@ matplotlib
 opencv-python-headless
 google-cloud-storage
 Pillow
+google-cloud-storage==407.0.0-0
