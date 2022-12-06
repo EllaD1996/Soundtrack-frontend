@@ -4,10 +4,34 @@ from interface_backend import create_playlist
 import requests
 
 
+st.title('Soundtrack Selector')
 
-st.markdown('# soundtrack selectah')
+# def add_logo():
+#     st.markdown(
+#         """
+#         <style>
+#             [data-testid="stSidebarNav"] {
+#                 background-image: url(http://placekitten.com/200/200);
+#                 background-repeat: no-repeat;
+#                 padding-top: 120px;
+#                 background-position: 20px 20px;
+#             }
+#             [data-testid="stSidebarNav"]::before {
+#                 content: "My Company Name";
+#                 margin-left: 20px;
+#                 margin-top: 20px;
+#                 font-size: 30px;
+#                 position: relative;
+#                 top: 100px;
+#             }
+#         </style>
+#         """,
+#         unsafe_allow_html=True,
+    # )
 
-#st.camera_input('take a pic')
+# add_logo()
+# #st.camera_input('take a pic')
+# st.markdown(f'<h1 style="color:#33ff33;font-size:24px;font-family:arial">Soundtrack Selector</h1>', unsafe_allow_html=True)
 
 uploaded_image = st.file_uploader('upload a pic',
                  type=['png','jpg','jpeg'],
@@ -19,9 +43,9 @@ uploaded_image = st.file_uploader('upload a pic',
 if uploaded_image is not None:
     print(uploaded_image)
     #Local
-    response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
+    #local_response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
     #GCloud
-    #response = requests.post("http://127.0.0.1:8000/image",files={"file":uploaded_image.getvalue()})
+    response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict",files={"file":uploaded_image.getvalue()})
     st.write(response.status_code)
     st.write(type(response.json()))
     st.write(response.json())
