@@ -1,7 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from interface_backend import create_playlist
+from interface_backend import create_album
 import requests
+from soundtrack.spotify.spotify_api import get_playlist
 
 st.title('Soundtrack Selector')
 
@@ -52,7 +53,16 @@ if uploaded_image is not None:
     index_result = response.json()
 
 
-    playlist_link = create_playlist(index_result)
+    album_dict = create_album(index_result)
+
+    selected_genre = st.selectbox('pick a genre', album_dict.values())
+
+    for i in album_dict:
+        if album_dict[i]==selected_genre:
+            pl = i
+
+    # Run spotypi api
+    playlist = get_playlist(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
 
 
 #get links from spotify
@@ -63,4 +73,4 @@ if st.button('gimme a playlist'):
     st.title('it looks like you are in *insert film title*')
     st.write('this is your original soundtrack lol:')
 
-    components.iframe(playlist_link, width=700, height=300)
+    components.iframe(playlist, width=700, height=300)

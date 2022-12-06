@@ -19,7 +19,7 @@ def spotify_access():
     return sp
 
 
-def get_playlists(films):
+def get_playlist(films):
 
     sp = spotify_access()
 
