@@ -25,13 +25,18 @@ def return_index():
 
     return df
 
-def find_info_in_data(indices):
+def find_info_in_data(indices, data='local'):
     """
     Summary: Runs through the movie data and builds list with: title, year, genre and image name
-    Input: indices -> list [1,2,34,,5]
+    Input:
+    indices -> list [1,2,34,,5]
+    data -> local: read data local, web: read data in gcloud (not working)
     Return: film_info and images names-> tuple
     """
-    data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
+    if data == 'web':
+        data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
+    if data == 'local':
+        data = pd.read_csv("soundtrack/data/final_dataframe.csv")
     df = return_index()
     info = []
     image_names = []

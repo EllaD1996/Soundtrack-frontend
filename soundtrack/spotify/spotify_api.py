@@ -23,11 +23,12 @@ def get_playlists(films):
 
     sp = spotify_access()
 
-    film_titles, years, genres = find_ost(films)
-
+    #film_titles, years, genres = find_ost(films)
+    film_titles, genres = find_ost(films)
     playlists = []
     for title in range(len(film_titles)):
-        results = sp.search(q='album' + film_titles[title]+ ' ' + years[title], market='GB')
+        #results = sp.search(q='album' + film_titles[title]+ ' ' + years[title], market='GB')
+        results = sp.search(q='album' + film_titles[title], market='GB')
         for album_info in results['tracks']['items']:
             if album_info['album']['total_tracks'] > 3:
                 if album_info['album']['external_urls']['spotify'] not in playlists:
