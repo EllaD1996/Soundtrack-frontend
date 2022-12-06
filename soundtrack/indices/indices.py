@@ -34,9 +34,9 @@ def find_info_in_data(indices, data='local'):
     Return: film_info and images names-> tuple
     """
     if data == 'web':
-        data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
+        data = pd.read_csv("gs://image-storage-stills/dataset/new_data_13k.csv")
     if data == 'local':
-        data = pd.read_csv("soundtrack/data/final_dataframe.csv")
+        data = pd.read_csv("soundtrack/data/new_data_13k.csv")
     df = return_index()
     info = []
     image_names = []

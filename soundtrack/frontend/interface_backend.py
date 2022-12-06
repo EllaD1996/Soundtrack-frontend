@@ -1,5 +1,5 @@
 from soundtrack.discogs.discogs_api import find_ost
-from soundtrack.spotify.spotify_api import get_playlists
+
 from soundtrack.indices.indices import find_info_in_data
 
 def create_album(index_result):
@@ -13,16 +13,11 @@ def create_album(index_result):
 
     # Run discogs api
     album_dict = find_ost(movies_titles)
+    print(album_dict)
 
     return album_dict
 
-    selected_genre = st.selectbox('pick a genre', album_dict.values())
-
-    for i in album_dict:
-        if album_dict[i]==selected_genre:
-            pl = i
-
     # Run spotypi api
-    playlist = get_playlists(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
+    #playlist = get_playlists(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
 
     #Return input to put the playlist in streamlit
