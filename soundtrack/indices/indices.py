@@ -37,15 +37,18 @@ def find_info_in_data(indices, data='local'):
         data = pd.read_csv("gs://image-storage-stills/dataset/new_data_13k.csv")
     if data == 'local':
         data = pd.read_csv("soundtrack/data/new_data_13k.csv")
-    df = return_index()
     info = []
     image_names = []
     for index in indices:
-        name = df._get_value(index, "Image_Name")
-        nindex = data.index[data['Image_name'] == name.replace('New_Image/', "")]
-        title = (data.loc[nindex, 'Title'].item()).capitalize()
-        year = data.loc[nindex, 'Year'].item()
-        genre = data.loc[nindex, 'Genre'].item()
+        # name = df._get_value(index, "Image_Name")
+        # nindex = data.index[data['Image_name'] == name.replace('New_Image/', "")]
+        # title = (data.loc[nindex, 'Title'].item()).capitalize()
+        # year = data.loc[nindex, 'Year'].item()
+        # genre = data.loc[nindex, 'Genre'].item()
+        name = data.loc[index, 'Image_name'].item()
+        title = (data.loc[index, 'Title'].item()).capitalize()
+        year = data.loc[index, 'Year'].item()
+        genre = data.loc[index, 'Genre'].item()
         info.append([title, year, genre])
         image_names.append(name)
 
