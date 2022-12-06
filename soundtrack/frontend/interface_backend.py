@@ -16,13 +16,12 @@ def create_playlist(index_result):
 
     selected_genre = st.selectbox('pick a genre', album_dict.values())
 
-    # Run spotypi api
     for i in album_dict:
         if album_dict[i]==selected_genre:
             pl = i
 
+    # Run spotypi api
     playlist = get_playlists(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
 
     #Return input to put the playlist in streamlit
-    return playlist
-
+    return album_dict
