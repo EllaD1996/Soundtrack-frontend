@@ -9,7 +9,7 @@ def find_ost(films):
     """
     Summary: Runs a query on the Discogs API for the film name to return full title,
     year and genre of the same film
-    Input: name of the film -> list
+    Input: name of the film -> list of lists
     Return: Title, Year, Genre -> tuple
     """
 

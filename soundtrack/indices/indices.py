@@ -28,7 +28,7 @@ def return_index():
 def find_info_in_data(indices):
     """
     Summary: Runs through the movie data and builds list with: title, year, genre and image name
-    Input: indices -> np.array
+    Input: indices -> np.array [[1,2,34,,5]]
     Return: film_info and images names-> tuple
     """
     data = pd.read_csv("gs://image-storage-stills/dataset/final_dataframe.csv")
