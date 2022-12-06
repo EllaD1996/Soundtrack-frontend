@@ -3,7 +3,6 @@ import streamlit.components.v1 as components
 from interface_backend import create_playlist
 import requests
 
-
 st.title('Soundtrack Selector')
 
 # def add_logo():
@@ -53,24 +52,15 @@ if uploaded_image is not None:
     index_result = response.json()
 
 
-    entire_playlist = create_playlist(index_result)
-
-
-
-
-
-
-
-
+    playlist_link = create_playlist(index_result)
 
 
 #get links from spotify
-pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
-
+#pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
 
 if st.button('gimme a playlist'):
 
     st.title('it looks like you are in *insert film title*')
     st.write('this is your original soundtrack lol:')
 
-    components.iframe(pl_link, width=700, height=300)
+    components.iframe(playlist_link, width=700, height=300)
