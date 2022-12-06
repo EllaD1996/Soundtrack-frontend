@@ -38,7 +38,7 @@ def find_ost(films):
         except:
             genre = 'OST'
 
-        ost_with_genres[data['title']] = genre
+        ost_with_genres[data['title']] = ', '.join(genre)
     return ost_with_genres
 
 
