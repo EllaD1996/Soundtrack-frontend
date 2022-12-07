@@ -3,27 +3,30 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import pandas as pd
+from google.oauth2 import service_account
 
 #####need to have indice from model MISSING
 
-def return_index():
-    """
-    Summary:Returns bucket index and names for given indices
-    Input: None
-    Return: bucket items -> DataFrame
-    """
-    client = storage.Client()
-    bucket_name = 'image-storage-stills'
-    bucket = client.get_bucket(bucket_name)
-    dirname = 'New_Image/'
-    blobs = bucket.list_blobs(prefix=dirname)
-    indx = []
 
-    for blob in blobs:
-        indx.append(blob.name)
-    df = pd.DataFrame(indx, columns=["Image_Name"])
 
-    return df
+#def return_index(credencials):
+#    """
+#    Summary:Returns bucket index and names for given indices
+#    Input: None
+#    Return: bucket items -> DataFrame
+#    """
+#    client = storage.Client(credentials=credencials)
+#    bucket_name = 'image-storage-stills'
+#    bucket = client.get_bucket(bucket_name)
+#    dirname = 'New_Image/'
+#    blobs = bucket.list_blobs(prefix=dirname)
+#    indx = []
+#
+#    for blob in blobs:
+#        indx.append(blob.name)
+#    df = pd.DataFrame(indx, columns=["Image_Name"])
+#
+#    return df
 
 def find_info_in_data(indices, data='local'):
     """
@@ -50,13 +53,13 @@ def find_info_in_data(indices, data='local'):
 
     return info, image_names
 
-def get_image(image_names):
+def get_image(image_names,credencials):
     """
     Summary: Given the image names, get image from bucket
     Input: images names -> list
     Return: actual images -> string?
     """
-    client =  storage.Client()
+    client =  storage.Client(credentials=credencials)
     bucket = client.get_bucket('image-storage-stills')
     images = []
     for name in image_names:
@@ -78,14 +81,14 @@ def load_data_new_image(image):
                     bytearray(image), dtype=np.uint8), -1)
                                 )
 
-def show_image(indices):
+def show_image(indices,credentials):
     """
     Summary: Shows image.shocking
     Input: indices -> np.array
     Return: original image -> .png
     """
     info, image_names = find_info_in_data(indices)
-    images = get_image(image_names)
+    images = get_image(image_names,credentials)
     for image in images:
         out = load_data_new_image(image)
         plt.imshow(out)
