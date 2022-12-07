@@ -1,14 +1,17 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from interface_backend import create_album
+from interface_backend import create_album, get_scene_image
 import requests
 from soundtrack.spotify.spotify_api import get_playlist
 from css import get_css
+from google.oauth2 import service_account
+from google.cloud import storage
 
 st.set_page_config(layout='wide')
 
 st.markdown(get_css(), unsafe_allow_html=True)
 st.sidebar.image("Picture2.png", use_column_width=True)
+
 
 col1, col2 = st.columns([5, 1])
 
@@ -39,61 +42,75 @@ uploaded_image = st.file_uploader('upload a pic',
                  ) # take care about the format, tf suport others?
 
 
-if uploaded_image is not None and "RAN" not in st.session_state.keys():
-    print(uploaded_image)
+
+#st.session_state
+
+#----------------------------------------------------------------------------------------------------
+if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
+    st.image(uploaded_image)
     #Local
-    #local_response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
+    #response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
     #GCloud
 
     response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict",files={"file":uploaded_image.getvalue()})
 
-    st.write(response.status_code)
-    st.write(type(response.json()))
-    st.write(response.json())
-    print('Image sended to the server')
+    #st.write(response.status_code)
+    #st.write(type(response.json()))
+    #st.write(response.json())
+    #print('Image sended to the server')
     index_result = response.json()
 
-    print('---ALBUM CREATED---')
     album_dict = create_album(index_result)
 
+    print('---ALBUM CREATED---')
+
+    st.session_state['album_names'] = album_dict
+
     # Run spotypi api
-
-
-    if "RAN" not in st.session_state.keys():
-        print("First RAN CREATED")
-        st.session_state["RAN"] = True
+    if "STEP_1" not in st.session_state.keys():
+        print("FIRST STEP COMPLETED")
+        st.session_state["STEP_1"] = True
         print(st.session_state.keys())
 
+#----------------------------------------------------------------------------------------------------
+if "STEP_1" in st.session_state.keys():
 
-if "RAN set playlist" not in st.session_state.keys() and "RAN" in st.session_state.keys():
+    selected_genre = st.selectbox('Pick a genre', st.session_state['album_names'].values())
 
-    selected_genre = st.selectbox('pick a genre', album_dict.values())
-
-    for album_name, genre in album_dict.items():
-
-        print(f'Album: {album_name}')
-        print(f'Genre: {genre}')
+    for album_name, genre in st.session_state['album_names'].items():
         if genre==selected_genre:
         # PROBLEM WHEN WE HAVE THE SAME GENRES
-            playlist = get_playlist(album_name).replace('https://open.spotify.com','https://open.spotify.com/embed')
+            playlist = get_playlist(album_name).replace('https://open.spotify.com',
+                                                        'https://open.spotify.com/embed')
             st.session_state['playlist'] = playlist
 
-    if 'RAN set playlist' not in st.session_state.keys():
-        print("Second RAN")
-        st.session_state["RAN set playlist"] = True
+    if 'STEP_2' not in st.session_state.keys():
+        print("SECOND STEP COMPLETAED")
+        st.session_state["STEP_2"] = True
         print(st.session_state.keys())
 
+#----------------------------------------------------------------------------------------------------
+#
+#
+#if "STEP_2" not in st.session_state.keys() and "STEP_1" in st.session_state.keys():
+#
+#    selected_genre = st.selectbox('Pick a genre', album_dict.values())
+#
+#    for album_name, genre in album_dict.items():
+#        if genre==selected_genre:
+#        # PROBLEM WHEN WE HAVE THE SAME GENRES
+#            playlist = get_playlist(album_name).replace('https://open.spotify.com','https://open.spotify.com/embed')
+#            st.session_state['playlist'] = playlist
+#
+#    if 'STEP_2' not in st.session_state.keys():
+#        print("SECOND STEP COMPLETAED")
+#        st.session_state["STEP_2"] = True
+#        print(st.session_state.keys())
+#
+#----------------------------------------------------------------------------------------------------
 
-    for i in album_dict:
-        if album_dict[i]==selected_genre:
-            pl = i
 
-    # Run spotypi api
-    playlist = get_playlist(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
-
-
-
-if "RAN set playlist" in st.session_state.keys() and "RAN" in st.session_state.keys():
+if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys():
     print(f'PLAYLIST CRATED FOR YOUR CHOSEE : {st.session_state["playlist"]}')
 
     #get links from spotify
@@ -102,8 +119,15 @@ if "RAN set playlist" in st.session_state.keys() and "RAN" in st.session_state.k
 
     if st.button('gimme a playlist'):
 
-        st.title('it looks like you are in *insert film title*')
-        st.write('this is your original soundtrack lol:')
-
-
+        st.title('It looks like you are in *insert film title*')
+        st.write('This is your original soundtrack lol:')
         components.iframe(st.session_state["playlist"], width=700, height=300)
+
+
+        movies_tuple = get_scene_image(index_result)
+        for item in movies_tuple:
+            film_title = item[0]
+            image_names = item[1]
+            image_url = f'https://storage.googleapis.com/image-storage-stills/New_Image/{image_names}'
+            st.image(image_url)
+            st.write(film_title)
