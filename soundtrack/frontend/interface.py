@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from interface_backend import create_album
+from interface_backend import create_album, get_scene_image
 import requests
 from soundtrack.spotify.spotify_api import get_playlist
 from google.oauth2 import service_account
@@ -70,7 +70,7 @@ if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
     index_result = response.json()
 
     print('---ALBUM CREATED---')
-    album_dict = create_album(index_result)
+
     st.session_state['album_names'] = album_dict
 
     # Run spotypi api
@@ -87,7 +87,8 @@ if "STEP_1" in st.session_state.keys():
     for album_name, genre in st.session_state['album_names'].items():
         if genre==selected_genre:
         # PROBLEM WHEN WE HAVE THE SAME GENRES
-            playlist = get_playlist(album_name).replace('https://open.spotify.com','https://open.spotify.com/embed')
+            playlist = get_playlist(album_name).replace('https://open.spotify.com',
+                                                        'https://open.spotify.com/embed')
             st.session_state['playlist'] = playlist
 
     if 'STEP_2' not in st.session_state.keys():
@@ -127,4 +128,15 @@ if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys
 
         st.title('It looks like you are in *insert film title*')
         st.write('This is your original soundtrack lol:')
+
+
+
+        for movie_index in index_result:
+
+            image_names, film_title = get_scene_image(movie_index)
+            image_url = f'https://storage.googleapis.com/image-storage-stills/{image_names}'
+            st.image(image_url)
+            st.write(film_title)
+
+
         components.iframe(st.session_state["playlist"], width=700, height=300)
