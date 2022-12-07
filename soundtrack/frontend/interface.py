@@ -40,7 +40,7 @@ uploaded_image = st.file_uploader('upload a pic',
                  ) # take care about the format, tf suport others?
 
 
-if uploaded_image is not None:
+if uploaded_image is not None and "RAN" not in st.session_state.keys():
     print(uploaded_image)
     #Local
     #local_response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
@@ -55,18 +55,35 @@ if uploaded_image is not None:
 
     album_dict = create_album(index_result)
 
+    # Run spotypi api
+
+    if "RAN" not in st.session_state.keys():
+        print("First RAN")
+        st.session_state["RAN"] = True
+        print(st.session_state.keys())
+
+
+if "RAN set playlist" not in st.session_state.keys() and "RAN" in st.session_state.keys():
     selected_genre = st.selectbox('pick a genre', album_dict.values())
 
-    for i in album_dict:
-        if album_dict[i]==selected_genre:
-            pl = i
+    for album_name, genre in album_dict.items():
 
-    # Run spotypi api
-    playlist = get_playlist(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
+        print(f'Album: {album_name}')
+        print(f'Genre: {genre}')
+        if genre==selected_genre:
+            pl = album_name
+            playlist = get_playlist(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
+
+    if 'RAN set playlist' not in st.session_state.keys():
+        print("First RAN")
+        st.session_state["RAN set playlist"] = True
+        print(st.session_state.keys())
+
+
 
 
 #get links from spotify
-#pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
+pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
 
 if st.button('gimme a playlist'):
 

@@ -16,7 +16,10 @@ def find_ost(films):
     consumer_key = os.getenv("CONSUMER_KEY")
     consumer_secret = os.getenv("CONSUMER_SECRET")
     ost_with_genres = {}
+    print(f'LEN MOVIES {len(films)}')
     for film in films:
+        print('***********')
+        print(film)
         url = f'https://api.discogs.com/database/search?q={film}/'
         params = {'key':consumer_key,
                 'secret':consumer_secret,
@@ -39,6 +42,8 @@ def find_ost(films):
             genre = 'OST'
 
         ost_with_genres[data['title']] = ', '.join(genre)
+    print(f'OST WITH GENRES : {ost_with_genres}')
+    print(f'LEN : {len(ost_with_genres.keys())}')
     return ost_with_genres
 
 

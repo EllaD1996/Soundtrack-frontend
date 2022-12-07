@@ -10,10 +10,16 @@ def create_album(index_result):
     # Searching for the movie title
     movies_info, images = find_info_in_data(list_index)
     movies_titles = [movie[0] for movie in movies_info]
+    print(f'LEN MOVIES : {len(movies_titles)}')
 
     # Run discogs api
     album_dict = find_ost(movies_titles)
+    print('-----------------------------------')
+    print(type(album_dict))
+    print(album_dict.keys())
+    print(album_dict.values())
     print(album_dict)
+    print('-----------------------------------')
 
     return album_dict
 
