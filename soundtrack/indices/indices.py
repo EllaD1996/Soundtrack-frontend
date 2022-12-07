@@ -29,7 +29,7 @@ def find_info_in_data(indices, data='local'):
     """
     Summary: Runs through the movie data and builds list with: title, year, genre and image name
     Input:
-    indices -> list [1,2,34,,5]
+    indices -> list [1,2,3, 4,5]
     data -> local: read data local, web: read data in gcloud (not working)
     Return: film_info and images names-> tuple
     """
@@ -37,18 +37,14 @@ def find_info_in_data(indices, data='local'):
         data = pd.read_csv("gs://image-storage-stills/dataset/new_data_13k.csv")
     if data == 'local':
         data = pd.read_csv("soundtrack/data/new_data_13k.csv")
+
     info = []
     image_names = []
     for index in indices:
-        # name = df._get_value(index, "Image_Name")
-        # nindex = data.index[data['Image_name'] == name.replace('New_Image/', "")]
-        # title = (data.loc[nindex, 'Title'].item()).capitalize()
-        # year = data.loc[nindex, 'Year'].item()
-        # genre = data.loc[nindex, 'Genre'].item()
-        name = data.loc[index, 'Image_name'].item()
-        title = (data.loc[index, 'Title'].item()).capitalize()
-        year = data.loc[index, 'Year'].item()
-        genre = data.loc[index, 'Genre'].item()
+        name = data.loc[index, 'Image_name']
+        title = (data.loc[index, 'Title']).capitalize()
+        year = data.loc[index, 'Year']
+        genre = data.loc[index, 'Genre']
         info.append([title, year, genre])
         image_names.append(name)
 
