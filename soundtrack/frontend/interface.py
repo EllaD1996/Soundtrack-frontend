@@ -57,7 +57,7 @@ uploaded_image = st.file_uploader('upload a pic',
 
 #----------------------------------------------------------------------------------------------------
 if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
-    print(uploaded_image)
+    st.image(uploaded_image)
     #Local
     response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
     #GCloud
@@ -68,6 +68,8 @@ if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
     #st.write(response.json())
     #print('Image sended to the server')
     index_result = response.json()
+
+    album_dict = create_album(index_result)
 
     print('---ALBUM CREATED---')
 
@@ -128,15 +130,13 @@ if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys
 
         st.title('It looks like you are in *insert film title*')
         st.write('This is your original soundtrack lol:')
+        components.iframe(st.session_state["playlist"], width=700, height=300)
 
 
-
-        for movie_index in index_result:
-
-            image_names, film_title = get_scene_image(movie_index)
-            image_url = f'https://storage.googleapis.com/image-storage-stills/{image_names}'
+        movies_tuple = get_scene_image(index_result)
+        for item in movies_tuple:
+            film_title = item[0]
+            image_names = item[1]
+            image_url = f'https://storage.googleapis.com/image-storage-stills/New_Image/{image_names}'
             st.image(image_url)
             st.write(film_title)
-
-
-        components.iframe(st.session_state["playlist"], width=700, height=300)

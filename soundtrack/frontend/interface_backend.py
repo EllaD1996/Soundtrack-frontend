@@ -22,8 +22,13 @@ def create_album(index_result):
 
     #Return input to put the playlist in streamlit
 
-def get_scene_image(index):
-    info, image_names = find_info_in_data(index)
-    film_title = info[0]
+def get_scene_image(indeces):
+    info = []
+    print('################################')
+    print(f"INDEX : {indeces['idx']}")
+    print(f"TYPE INDEX : {type(indeces['idx'])}")
 
-    return image_names, film_title
+    info_films, images_names = find_info_in_data(indeces['idx'])
+    for index in range(len(info_films)):
+        info.append((info_films[index][0], images_names[index]))
+    return info
