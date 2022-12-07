@@ -6,6 +6,7 @@ from soundtrack.spotify.spotify_api import get_playlist
 
 st.title('Soundtrack Selector')
 
+
 def add_logo():
     st.markdown(
         """
@@ -51,9 +52,11 @@ uploaded_image = st.file_uploader('upload a pic',
 if uploaded_image is not None and "RAN" not in st.session_state.keys():
     print(uploaded_image)
     #Local
-    response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
+    #local_response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
     #GCloud
+
     #response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict",files={"file":uploaded_image.getvalue()})
+
     st.write(response.status_code)
     st.write(type(response.json()))
     st.write(response.json())
@@ -64,6 +67,7 @@ if uploaded_image is not None and "RAN" not in st.session_state.keys():
     album_dict = create_album(index_result)
 
     # Run spotypi api
+
 
     if "RAN" not in st.session_state.keys():
         print("First RAN CREATED")
@@ -90,6 +94,13 @@ if "RAN set playlist" not in st.session_state.keys() and "RAN" in st.session_sta
         print(st.session_state.keys())
 
 
+    for i in album_dict:
+        if album_dict[i]==selected_genre:
+            pl = i
+
+    # Run spotypi api
+    playlist = get_playlist(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
+
 
 
 if "RAN set playlist" in st.session_state.keys() and "RAN" in st.session_state.keys():
@@ -98,9 +109,12 @@ if "RAN set playlist" in st.session_state.keys() and "RAN" in st.session_state.k
     #get links from spotify
     pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
 
+
     if st.button('gimme a playlist'):
 
         st.title('it looks like you are in *insert film title*')
         st.write('this is your original soundtrack lol:')
 
+
         components.iframe(st.session_state["playlist"], width=700, height=300)
+
