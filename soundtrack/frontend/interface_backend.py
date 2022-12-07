@@ -1,6 +1,6 @@
 from soundtrack.discogs.discogs_api import find_ost
 
-from soundtrack.indices.indices import find_info_in_data
+from soundtrack.indices.indices import find_info_in_data, get_image
 
 def create_album(index_result):
     print('Process Complete finding your playlist...')
@@ -21,3 +21,9 @@ def create_album(index_result):
     #playlist = get_playlists(pl).replace('https://open.spotify.com','https://open.spotify.com/embed')
 
     #Return input to put the playlist in streamlit
+
+def get_scene_image(index):
+    info, image_names = find_info_in_data(index)
+    film_title = info[0]
+
+    return image_names, film_title
