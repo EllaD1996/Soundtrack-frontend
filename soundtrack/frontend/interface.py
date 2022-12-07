@@ -3,9 +3,12 @@ import streamlit.components.v1 as components
 from interface_backend import create_album, get_scene_image
 import requests
 from soundtrack.spotify.spotify_api import get_playlist
+from google.oauth2 import service_account
+from google.cloud import storage
+
+
 
 st.title('Soundtrack Selector')
-
 
 def add_logo():
     st.markdown(
@@ -127,11 +130,13 @@ if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys
         st.write('This is your original soundtrack lol:')
 
 
+
         for movie_index in index_result:
 
             image_names, film_title = get_scene_image(movie_index)
             image_url = f'https://storage.googleapis.com/image-storage-stills/{image_names}'
             st.image(image_url)
             st.write(film_title)
+
 
         components.iframe(st.session_state["playlist"], width=700, height=300)
