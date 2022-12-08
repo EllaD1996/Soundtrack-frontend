@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 env_path = find_dotenv()
-load_dotenv(env_path)
+load_dotenv(".env")
 
 def find_ost(films):
     """
@@ -26,10 +26,15 @@ def find_ost(films):
                 }
         response = requests.get(url,params=params)
 
+
         if response.status_code != 200:
             print(response.status_code)
             return 'Error'
 
+
+        if len(response.json()['results']) == 0:
+            ost_with_genres[film] = "OST"
+            return ost_with_genres
         data = response.json()['results'][0]
         try:
             genre = data['genres']
