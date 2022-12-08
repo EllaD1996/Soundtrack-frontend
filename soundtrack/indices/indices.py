@@ -32,15 +32,15 @@ def find_info_in_data(indices, data='local'):
     """
     Summary: Runs through the movie data and builds list with: title, year, genre and image name
     Input:
-    indices -> list [1,2,3, 4,5]
+    indices -> list [1,2,3,4,5]
     data -> local: read data local, web: read data in gcloud (not working)
     Return: film_info and images names-> tuple
     """
     if data == 'web':
-        data = pd.read_csv("gs://image-storage-stills/dataset/new_data_13k.csv")
+        data = pd.read_csv("gs://image-storage-stills/dataset/new_data_6k.csv")
     if data == 'local':
-        data = pd.read_csv("soundtrack/data/new_data_13k.csv")
-
+        #data = pd.read_csv("soundtrack/data/new_data_6k.csv")
+        data = pd.read_csv("soundtrack/data/new_data_no_bw.csv")
     info = []
     image_names = []
     for index in indices:
@@ -50,7 +50,11 @@ def find_info_in_data(indices, data='local'):
         genre = data.loc[index, 'Genre']
         info.append([title, year, genre])
         image_names.append(name)
-
+    print('+++++++++++++++++++++++++')
+    print(f'INDEX: {indices}')
+    print(f'INFO :{info} ')
+    print(f'INFO :{image_names} ')
+    print('+++++++++++++++++++++++++')
     return info, image_names
 
 def get_image(image_names,credencials):
@@ -63,7 +67,7 @@ def get_image(image_names,credencials):
     bucket = client.get_bucket('image-storage-stills')
     images = []
     for name in image_names:
-        dirname = 'New_Image/'
+        dirname = 'New_Image_2/'
         blob = bucket.get_blob(name, prefix=dirname)
         image = blob.download_as_string()
         images.append(image)

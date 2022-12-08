@@ -1,6 +1,5 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from soundtrack.discogs.discogs_api import find_ost
 import os
 from dotenv import load_dotenv, find_dotenv
 
@@ -23,7 +22,6 @@ def get_playlist(film):
 
     sp = spotify_access()
 
-    #film_titles, years, genres = find_ost(films)
     playlists = []
 
     results = sp.search(q='album' + film, market='GB')

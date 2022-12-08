@@ -60,25 +60,33 @@ if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
     #print('Image sended to the server')
     index_result = response.json()
 
+
     album_dict = create_album(index_result)
+    #before {film:genre}
+    #now:{index:{film:genre}}
 
     print('---ALBUM CREATED---')
 
-    st.session_state['album_names'] = album_dict
+    st.session_state['album_names'] = list(album_dict.values())
 
     # Run spotypi api
     if "STEP_1" not in st.session_state.keys():
         print("FIRST STEP COMPLETED")
         st.session_state["STEP_1"] = True
-        print(st.session_state.keys())
+        #print(st.session_state.keys())
 
 #----------------------------------------------------------------------------------------------------
 if "STEP_1" in st.session_state.keys():
+    genre_list = [ (num, movie['genre'])  for num, movie in enumerate(st.session_state['album_names'])]
+    selected_genre = st.selectbox('Pick a genre: ', genre_list ,format_func = lambda x:f'Option {x[0]+1} : {x[1]}')
 
-    selected_genre = st.selectbox('Pick a genre', st.session_state['album_names'].values())
+    st.session_state['genre_tuple'] = selected_genre
 
-    for album_name, genre in st.session_state['album_names'].items():
-        if genre==selected_genre:
+
+    for num,dict_info in enumerate(st.session_state['album_names']):
+        genre = dict_info['genre']
+        album_name = dict_info['album_name']
+        if genre==selected_genre[1]:
         # PROBLEM WHEN WE HAVE THE SAME GENRES
             playlist = get_playlist(album_name).replace('https://open.spotify.com',
                                                         'https://open.spotify.com/embed')
@@ -87,47 +95,36 @@ if "STEP_1" in st.session_state.keys():
     if 'STEP_2' not in st.session_state.keys():
         print("SECOND STEP COMPLETAED")
         st.session_state["STEP_2"] = True
-        print(st.session_state.keys())
-
-#----------------------------------------------------------------------------------------------------
-#
-#
-#if "STEP_2" not in st.session_state.keys() and "STEP_1" in st.session_state.keys():
-#
-#    selected_genre = st.selectbox('Pick a genre', album_dict.values())
-#
-#    for album_name, genre in album_dict.items():
-#        if genre==selected_genre:
-#        # PROBLEM WHEN WE HAVE THE SAME GENRES
-#            playlist = get_playlist(album_name).replace('https://open.spotify.com','https://open.spotify.com/embed')
-#            st.session_state['playlist'] = playlist
-#
-#    if 'STEP_2' not in st.session_state.keys():
-#        print("SECOND STEP COMPLETAED")
-#        st.session_state["STEP_2"] = True
-#        print(st.session_state.keys())
-#
-#----------------------------------------------------------------------------------------------------
-
+        #print(st.session_state.keys())
 
 if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys():
     print(f'PLAYLIST CRATED FOR YOUR CHOSEE : {st.session_state["playlist"]}')
 
     #get links from spotify
-    pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
+    #pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
 
 
     if st.button('gimme a playlist'):
 
-        st.title('It looks like you are in *insert film title*')
-        st.write('This is your original soundtrack lol:')
-        components.iframe(st.session_state["playlist"], width=700, height=300)
-
-
         movies_tuple = get_scene_image(index_result)
+
         for item in movies_tuple:
             film_title = item[0]
             image_names = item[1]
-            image_url = f'https://storage.googleapis.com/image-storage-stills/New_Image/{image_names}'
-            st.image(image_url)
-            st.write(film_title)
+            for num,dict_info  in enumerate(st.session_state['album_names']):
+                print('########NUMBER############')
+                print(st.session_state['genre_tuple'][0])
+                if num == st.session_state['genre_tuple'][0] and film_title == dict_info['film']:
+                    image_url = f'https://storage.googleapis.com/image-storage-stills/New_Image_2/{image_names}'
+                    st.write(f'It looks like you are in:')
+                    st.title(f'{film_title.capitalize()}')
+
+                    st.write(f"This is your original soundtrack: ")
+                    st.title(f"{dict_info['album_name'].capitalize()} ")
+
+                    components.iframe(st.session_state["playlist"], width=800, height=300)
+                    st.image(image_url)
+                    break
+                else:
+                    pass
+            break
