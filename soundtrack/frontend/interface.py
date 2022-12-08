@@ -3,43 +3,33 @@ import streamlit.components.v1 as components
 from interface_backend import create_album, get_scene_image
 import requests
 from soundtrack.spotify.spotify_api import get_playlist
+from css import get_css
 from google.oauth2 import service_account
 from google.cloud import storage
 
+st.set_page_config(layout='wide')
+
+st.markdown(get_css(), unsafe_allow_html=True)
+st.sidebar.image("Picture2.png", use_column_width=True)
 
 
-st.title('Soundtrack Selector')
+col1, col2 = st.columns([5, 1])
 
-def add_logo():
-    st.markdown(
-        """
-        <style>
-            [data-testid="stSidebarNav"] {
-                background-image: url(http://placekitten.com/200/200);
-                background-repeat: no-repeat;
-                padding-top: 120px;
-                background-position: 20px 20px;
-            }
-            [data-testid="stSidebarNav"]::before {
-                content: "My Company Name";
-                margin-left: 20px;
-                margin-top: 20px;
-                font-size: 30px;
-                position: relative;
-                top: 100px;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True,
- )
+with col1:
+    st.markdown(f'<h1 style="color:#FFB341;font-size:100px;font-family:cooper black">Soundtrack<br>Selector</h1>', unsafe_allow_html=True)
+
+with col2:
+    st.image("Picture2.png", width = 175, use_column_width=False)
 
 
-add_logo()
-st.camera_input('take a pic')
-st.markdown(f'<h1 style="color:#33ff33;font-size:24px;font-family:arial">Soundtrack Selector</h1>', unsafe_allow_html=True)
+st.sidebar.markdown("### Find your  ideal soundtrack for your surroundings")
+st.sidebar.markdown("Welcome to our app! Here you can submit an image and get the perfect soundtrack to listen to for your environment")
 
 
+col_1, col_2 = st.columns(2)
 
+with col_1:
+    st.markdown(f'<h1>          <br>              <br>           <br>              </h1>', unsafe_allow_html=True)
 #-----------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -59,9 +49,10 @@ uploaded_image = st.file_uploader('upload a pic',
 if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
     st.image(uploaded_image)
     #Local
-    response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
+    #response = requests.post("http://0.0.0.0:8000/predict", files={"file":uploaded_image.getvalue()})
     #GCloud
-    #response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict",files={"file":uploaded_image.getvalue()})
+
+    response = requests.post("https://ss-2uwfe4q3ia-ew.a.run.app/predict",files={"file":uploaded_image.getvalue()})
 
     #st.write(response.status_code)
     #st.write(type(response.json()))
@@ -71,6 +62,7 @@ if uploaded_image is not None: # "STEP_1" not in st.session_state.keys():
 
     album_dict = create_album(index_result)
 
+    print(album_dict)
     print('---ALBUM CREATED---')
 
     st.session_state['album_names'] = album_dict
@@ -86,6 +78,7 @@ if "STEP_1" in st.session_state.keys():
 
     selected_genre = st.selectbox('Pick a genre', st.session_state['album_names'].values())
 
+    print(st.session_state["album_names"])
     for album_name, genre in st.session_state['album_names'].items():
         if genre==selected_genre:
         # PROBLEM WHEN WE HAVE THE SAME GENRES
@@ -126,10 +119,9 @@ if "playlist" in st.session_state.keys():# and "STEP_1" in st.session_state.keys
     pl_link = 'https://open.spotify.com/embed/album/5vdGNez4ZbeSUaeiFTPpcx'
 
 
-    if st.button('gimme a playlist'):
+    if st.button('Give me a playlist'):
 
-        st.title('It looks like you are in *insert film title*')
-        st.write('This is your original soundtrack lol:')
+        st.write('This is your selected soundtrack')
         components.iframe(st.session_state["playlist"], width=700, height=300)
 
 
